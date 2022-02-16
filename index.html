@@ -1,3 +1,4 @@
+<html manifest="demo.appcache">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -14,3 +15,21 @@
 <div><a href="./docs/左耳听风/index.html">左耳听风</a></div>
 <div><a href="./docs/苏杰的产品创新课/index.html">苏杰的产品创新课</a></div>
 <div><a href="./docs/邱岳的产品手记/index.html">邱岳的产品手记</a></div>
+
+<script>
+    // 判断浏览器是否支持 Service Worker
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            // 注册 Service Worker
+            navigator.serviceWorker.register('/sw.js')
+                .then(function (registration) {
+                    console.log('sw.js 注册成功', registration.scope);
+                })
+                .catch(function (err) {
+                    console.log('sw.js 注册失败 ', err);
+                });
+        });
+    }
+</script>
+    
+</html>

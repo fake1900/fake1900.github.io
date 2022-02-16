@@ -1,7 +1,7 @@
 {
-  "name": "dtpei",
-  "short_name": "dtpei",
-  "description": "一个儿科医生8年写成的「育儿宝典」，值得每位中国父母收藏",
+  "name": "docs",
+  "short_name": "docs",
+  "description": "docs",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#fff",

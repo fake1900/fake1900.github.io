@@ -2,6 +2,7 @@
 // Service Worker 注册失败，请求不会进入 fetch 事件
 // var request = window.indexedDB.open("MyTestDatabase");
 
+/*
 self.addEventListener('fetch', function (event) {
     
     // 打印请求资源网址
@@ -40,7 +41,9 @@ self.addEventListener('fetch', function (event) {
         })
     );
 })
-/*
+*/
+ 
+/**/
 
 var cacheName = 'js13kPWA-v2';
 var contentToCache = [
@@ -68,6 +71,8 @@ var contentToCache = [
     '/docs/01-左耳听风/html/08丨程序员练级攻略 (23讲)/90丨程序员练级攻略：技术资源集散地.html'
 ];
 
+
+
 self.addEventListener('install', function(e) {
     console.log('[Service Worker] Install');
     e.waitUntil(
@@ -76,4 +81,4 @@ self.addEventListener('install', function(e) {
             return cache.addAll(contentToCache);
         })
     );
-});*/
+});

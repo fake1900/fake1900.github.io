@@ -1,0 +1,613 @@
+<html>
+ <head>
+  <style>li{list-style-type:none;}ul{padding-left: 0;}code{overflow-x: auto !important;}</style>
+ </head>
+ <body>
+  ﻿ 
+  <base href="https://time.geekbang.org/column/article/12423">
+  <meta charset="utf-8">
+  <meta name="keywords" content="极客时间,IT,职业教育,知识付费,二叉树,极客Live,极客搜索,互联网,前端开发,后端开发,编程语言,人工智能,区块链,技术大会,技术管理,产品,研发,测试,运维,数据库,架构,微服务,实战,技术专家,Java,iOS,Android,Linux,Go" id="metakeywords">
+  <meta name="description" content="极客时间是一款由极客邦科技倾力打造的面向IT领域的知识服务产品,旨在帮助用户提升技术认知.板块包含专栏文章、视频课程、新闻、资讯、直播、图书、商城等。内容覆盖IT从业者的全生命周期知识技能图谱,邀请左耳朵耗子、王争、杨晓峰、winter,丁奇等顶级技术和行业专家为你讲述技术本质,解读科技动态." id="metadesc">
+  <link rel="apple-touch-icon" sizes="180x180" href="//static001.geekbang.org/static/icon/time/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="//static001.geekbang.org/static/icon/time/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="//static001.geekbang.org/static/icon/time/favicon-16x16.png">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="format-detection" content="telephone=no">
+  <title>极客时间 | 深入拆解Java虚拟机</title>
+  <script data-savepage-src="https://hm.baidu.com/hm.js?022f847c4e3acd44d4a2481d9187f1e6" src=""></script>
+  <script async data-savepage-src="https://www.google-analytics.com/analytics.js" src=""></script>
+  <script type="text/javascript" data-savepage-src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js" src=""></script>
+  <script type="text/javascript" data-savepage-src="//at.alicdn.com/t/font_372689_nw1guejwd2q.js" src=""></script>
+  <script type="text/javascript"></script>
+  <style href="https://static001.geekbang.org/static/time/css/app.e30427d82748c1a9d53a048cf510f63c.css"></style>
+  <script type="text/javascript" charset="utf-8" async data-savepage-src="https://static001.geekbang.org/static/time/js/2.163902a6718e6dac10ce.js" src=""></script>
+  <style type="text/css">.hljs-ln{border-collapse:collapse}.hljs-ln td{padding:0}.hljs-ln-n:before{content:attr(data-line-number)}</style>
+  <style type="text/css">._3ADRghFH_0{background:#000}._21xvFvr7_0{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}._3O_7qs2p_0{opacity:0}._2q1SuvsS_0{opacity:1}._20-cXID6_0{max-width:46.25rem;min-height:100vh;margin:0 auto;background:#fff;-webkit-transition:background-color .3s ease;transition:background-color .3s ease}._20-cXID6_0 .PYIrCCrf_0{color:#888}._20-cXID6_0 ._1EUVUUrC_0,._20-cXID6_0 .PYIrCCrf_0{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}._20-cXID6_0 ._1EUVUUrC_0{color:#fff;background-color:#fa8919;font-weight:500}._20-cXID6_0 ._2QmGFWqF_0{padding-left:22px;padding-right:15px}._20-cXID6_0 ._3lTiSebX_0{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}._20-cXID6_0 ._3lTiSebX_0 ._7OuU9_xM_0{font-size:12px}._20-cXID6_0 ._50pDbNcP_0{padding-top:22px;padding-bottom:82px}._20-cXID6_0 .vJXgmLTi_0{color:#353535;font-weight:700;line-height:30px;font-size:22px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}._20-cXID6_0 ._2LbT9q3y_0{color:#888;font-size:13px;font-weight:400;margin-top:4px;margin-bottom:12px}._20-cXID6_0 ._2LbT9q3y_0 ._3FoXPaWx_0{margin-top:10px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center;overflow:hidden}._20-cXID6_0 ._2LbT9q3y_0 ._3FoXPaWx_0 .YLYfWxsg_0{color:#404040;font-size:15px;font-weight:400;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}._20-cXID6_0 ._2LbT9q3y_0 ._3FoXPaWx_0 .nJKayDbe_0{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;margin-left:10px;height:23px;border-radius:23px;font-size:13px;font-weight:400;color:#fa8919;padding-left:10px;padding-right:6px;background:#fbf5ee;white-space:nowrap}._20-cXID6_0 ._2LbT9q3y_0 ._3FoXPaWx_0 .nJKayDbe_0 ._2k8p2GLU_0{margin-left:2px;font-size:12px;-webkit-transform:scale(.7);transform:scale(.7)}._20-cXID6_0 ._3Jbcj4Iu_0._3BZBHEhm_0 video-webkit-media-controls-fullscreen-button{display:none}._20-cXID6_0 ._1-ZfmNK8_0{border-radius:6px;vertical-align:top;margin-bottom:24px;width:100%}._20-cXID6_0 ._3IatBmhv_0{margin-top:0}._20-cXID6_0 ._22WJb59B_0{color:#b2b2b2;padding-bottom:20px;font-size:13px;font-weight:400}._20-cXID6_0 ._22WJb59B_0 ._3ODTLCec_0{font-size:15px}._20-cXID6_0 ._3c2GGLul_0{width:100%;margin:20px 0}._20-cXID6_0 ._3EKy7lL9_0{overflow:hidden;padding-top:10px;margin-bottom:-30px}._20-cXID6_0 ._3EKy7lL9_0 a._1EUVUUrC_0{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}._20-cXID6_0 ._1qhD3bdE_0{padding-top:32px;border-top:10px solid #f6f7fb;-webkit-transition:border-top .3s ease;transition:border-top .3s ease;position:relative}._20-cXID6_0 ._1qhD3bdE_0 h2{color:#404040;position:relative;z-index:1;margin-bottom:1rem;font-weight:700;font-size:19px}._20-cXID6_0 ._1qhD3bdE_0 ._2FC_cD1O_0{font-size:16px;margin-left:5px}._20-cXID6_0 ._2-nZIZjB_0{position:absolute;z-index:2;background:#fa8919;font-size:13px;color:#fff;text-align:center;height:28px;width:80px;line-height:28px;-webkit-box-shadow:4px 5px 20px 1px rgba(250,137,25,.24);box-shadow:4px 5px 20px 1px rgba(250,137,25,.24);border-radius:28px;right:22px;top:32px}._20-cXID6_0 .YGjSYR8B_0{z-index:10;cursor:pointer}._20-cXID6_0 ._2DmyW7ex_0{cursor:pointer;padding-top:24px;padding-bottom:24px;position:relative}._20-cXID6_0 ._2DmyW7ex_0:before{content:" ";height:.5px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:22px;right:22px}._20-cXID6_0 ._2DmyW7ex_0 ._1M5b-cvc_0{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}._20-cXID6_0 ._2DmyW7ex_0 ._1M5b-cvc_0 ._3l55W_ak_0{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}._20-cXID6_0 ._2DmyW7ex_0 ._1M5b-cvc_0 ._3Ov-zF0e_0{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}.ZphmEful_0{height:60px;background:transparent}._2zq_fmRg_0{font-size:15px;color:#888;line-height:24px;border-left:3px solid #e8e8e8;padding-left:15px}._3uTMOfKI_0,._24nFYvU9_0{-webkit-transition:all .3s ease;transition:all .3s ease}._3WwMT2EY_0 ._1uEolA82_0,._9b3gTd1B_0 ._2NnvkXgw_0{-webkit-transform:translateX(-508px);transform:translateX(-508px)}._3WwMT2EY_0 ._2NnvkXgw_0,._9b3gTd1B_0 ._1uEolA82_0{-webkit-transform:translateX(508px);transform:translateX(508px)}._3BZBHEhm_0 ._2LbT9q3y_0{font-weight:700}._3BZBHEhm_0 ._2DmyW7ex_0:before{height:1px}@media only screen and (max-width:769px){._15u7cU5H_0{display:none!important}}@media only screen and (min-width:740px){._3ADRghFH_0{background:#fff}}.g78dTtKm_0{background:#f6f0e0}.g78dTtKm_0 ._1qhD3bdE_0{border-top:10px solid #efe6cf}.g78dTtKm_0 ._2DmyW7ex_0:before{background:#e5d8b5}.g78dTtKm_0 ._2DmyW7ex_0 ._1M5b-cvc_0 ._3l55W_ak_0{background:#efe6cf}.g78dTtKm_0 ._3lTiSebX_0{background-color:#efe6cf}._3uMzBYfb_0{background:#353535}._3uMzBYfb_0 ._2LbT9q3y_0,._3uMzBYfb_0 .vJXgmLTi_0{color:silver}._3uMzBYfb_0 ._1qhD3bdE_0{border-top:10px solid #3e3e3e}._3uMzBYfb_0 ._2DmyW7ex_0:before{background:#4c4c4c}._3uMzBYfb_0 ._2DmyW7ex_0 ._1M5b-cvc_0 ._3l55W_ak_0{background:#3e3e3e;color:silver}._3uMzBYfb_0 ._1qhD3bdE_0 h2,._3uMzBYfb_0 ._2DmyW7ex_0 ._1M5b-cvc_0 ._3Ov-zF0e_0{color:silver}._3uMzBYfb_0 ._3lTiSebX_0{background-color:#3e3e3e}._25ls2Q2l_0{margin-bottom:24px}._4ikL8tnR_0{padding-top:40px!important}.gpDqvVI7_0{position:fixed;top:0;bottom:0;width:100%;z-index:-1}</style>
+  <style type="text/css">._352wsGxH_0{height:63px}.Wz6esVdU_0{width:100%;height:63px;background:#fff;position:fixed;top:0;left:0;z-index:20;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-sizing:border-box;box-sizing:border-box;padding:0 13px;-webkit-box-shadow:0 2px 3px 0 hsla(0,0%,89%,.38);box-shadow:0 2px 3px 0 hsla(0,0%,89%,.38)}.{height:40px;width:110px;background:/*savepage-url=https://static001.geekbang.org/static/time/img/logo_pc@2x.90583da.png*/url(data:image/png;base64,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) no-repeat 0;background-size:110px;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:0 0 auto;cursor:pointer}._1k9ecCKw_0{width:30px;height:30px;padding-top:4px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:start;-ms-flex-pack:start;justify-content:start;font-size:14px;color:#444;margin-left:10px;cursor:pointer}._1U_jCCZU_0{-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto}._3oCJiu8W_0{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;padding:0 13px;background:#fbf5ee;border-radius:15px;height:30px}._7Xrmrbox_0,.gBs4U5qC_0,.JjI7sqpW_0{-webkit-box-flex:0;-ms-flex:0 0 auto;flex:0 0 auto;color:#fa8919;font-size:13px;font-weight:500;cursor:pointer}.JjI7sqpW_0{font-size:14px}._3lsV2-l9_0{height:13px;width:1px;background:#fa8919;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:0 0 auto;margin-left:10px;margin-right:10px}._1UaW_Eq1_0{position:fixed;top:0;bottom:0;left:0;right:0;z-index:21;background:#fff;-webkit-transform:translateY(-20px);transform:translateY(-20px);opacity:0;visibility:hidden;-webkit-transition:all .3s ease;transition:all .3s ease}._1UaW_Eq1_0._2mIjHHvm_0{-webkit-transform:translateY(0);transform:translateY(0);opacity:1;visibility:visible}._1qHJ5OLn_0{height:63px;-ms-flex-align:center;padding-left:15px;padding-right:15px;-webkit-box-shadow:0 2px 3px 0 hsla(0,0%,89%,.38);box-shadow:0 2px 3px 0 hsla(0,0%,89%,.38)}._1qHJ5OLn_0,._2FYmyQEJ_0{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;align-items:center}._2FYmyQEJ_0{-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;height:35px;-ms-flex-align:center;border-radius:20px;padding-left:20px;padding-right:20px}._1CLulytQ_0{font-size:14px;color:#b2b2b2}._1reF0JJk_0{height:20px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;margin-left:10px}._1reF0JJk_0 input{background:transparent;border:0;color:#353535;height:20px;line-height:20px;font-size:14px;width:100%;vertical-align:top;outline:none}._33xQ4nNG_0{font-size:16px;font-weight:400;color:#b2b2b2;height:30px;-webkit-box-align:center;-ms-flex-align:center;align-items:center;display:-webkit-box;display:-ms-flexbox;display:flex;margin-left:20px}._1y_WRr3L_0{font-size:18px}._1y_WRr3L_0 ._2HnUZhdg_0{color:#888;font-weight:400;padding-left:28px;height:63px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;border-bottom:1px solid #eee}._1y_WRr3L_0 ._2HnUZhdg_0._1r7t-t9P_0{color:#fa8919}._3IeMxVb7_0{position:absolute;bottom:40px;left:0;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-ms-flex-pack:distribute;justify-content:space-around}._3IeMxVb7_0 ._2HnUZhdg_0{position:relative;padding-top:46px;color:#888}._3IeMxVb7_0 ._339_Pvt6_0{position:absolute;color:#c3c3c3;height:46px;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;font-size:36px;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;top:0;left:0}</style>
+  <style type="text/css">._2SACi4xg_0{line-height:0}._2SACi4xg_0 img{vertical-align:top;margin-left:20px;opacity:.5}</style>
+  <style type="text/css">._1Bg5E78Y_0{width:100%;height:60px;background:#fff;-webkit-transition:background-color .3s ease;transition:background-color .3s ease;-webkit-box-sizing:border-box;box-sizing:border-box;padding-left:18px;padding-right:12px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;border-radius:6px 30px 30px 6px;-webkit-box-shadow:0 3px 25px 4px rgba(140,163,191,.14);box-shadow:0 3px 25px 4px rgba(140,163,191,.14)}._1Bg5E78Y_0 ._2Ha38TVL_0{border-radius:50%;width:40px;height:40px;-webkit-box-shadow:0 1px 3px 2px rgba(0,0,0,.1);box-shadow:0 1px 3px 2px rgba(0,0,0,.1);position:relative}._1Bg5E78Y_0 ._1iA2uC1V_0{background-repeat:no-repeat;background-position:0 0;background-size:300px;background-color:#fff;border-radius:50%;width:40px;height:40px;position:absolute;top:0;left:0}._1Bg5E78Y_0 ._1WF5YSBJ_0{background:rgba(0,0,0,.15)}._1Bg5E78Y_0 ._2Kms_g0F_0{width:40px;height:40px;line-height:40px;text-align:center;border-radius:50%;z-index:2;position:relative}._1Bg5E78Y_0 .MH1rcCm7_0 ._2Kms_g0F_0{color:#fff;margin-left:2px}._1Bg5E78Y_0 ._1KuRDTHn_0 ._2Kms_g0F_0{color:#fff}._1Bg5E78Y_0 .MH1rcCm7_0 ._1iA2uC1V_0{-webkit-animation:HvzpPu2i_0 4s linear infinite;animation:HvzpPu2i_0 4s linear infinite;-webkit-animation-play-state:paused;animation-play-state:paused}._1Bg5E78Y_0 ._1KuRDTHn_0 ._1iA2uC1V_0{-webkit-animation:HvzpPu2i_0 4s linear infinite;animation:HvzpPu2i_0 4s linear infinite;-webkit-animation-play-state:running;animation-play-state:running}._1Bg5E78Y_0 ._1qj_iPD7_0{-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;overflow:hidden;margin-right:10px}._1Bg5E78Y_0 ._1qj_iPD7_0 h3{color:#404040;font-size:15.25px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}._1Bg5E78Y_0 ._1qj_iPD7_0 p{margin:0;margin-top:.125rem;font-size:12px;font-weight:500;line-height:1rem;color:#999}._1Bg5E78Y_0 ._3PhVtlEa_0{width:20px;height:20px;-webkit-box-flex:0;-ms-flex:0 0 auto;flex:0 0 auto;position:relative;color:#999;font-size:18px;line-height:20px;text-align:center;margin-right:20px}._1Bg5E78Y_0 ._1l6e3976_0{width:10px;height:10px;line-height:10px;text-align:center;position:absolute;bottom:-3px;right:-5px;color:#6c0;background:#fff;font-size:10px;-webkit-transition:background-color .2s ease;transition:background-color .2s ease}._1W0qSnju_0{-webkit-box-shadow:0 3px 25px 4px hsla(42,28%,65%,.14);box-shadow:0 3px 25px 4px hsla(42,28%,65%,.14)}._1W0qSnju_0,._1W0qSnju_0 ._1l6e3976_0{background:#f6f0e0}._1W0qSnju_0 ._2Ha38TVL_0{-webkit-box-shadow:0 1px 2px 2px hsla(42,28%,65%,.14);box-shadow:0 1px 2px 2px hsla(42,28%,65%,.14)}._2SRR-E_O_0{background:#4d4d4d;-webkit-box-shadow:none;box-shadow:none}._2SRR-E_O_0 ._3PhVtlEa_0{color:#fff}._2SRR-E_O_0 ._1l6e3976_0{background:#4d4d4d}._2SRR-E_O_0 ._1qj_iPD7_0 h3,._2SRR-E_O_0 ._1qj_iPD7_0 p{color:silver}._2vBNygJQ_0 ._1qj_iPD7_0 p{font-weight:700}@-webkit-keyframes HvzpPu2i_0{to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}@keyframes HvzpPu2i_0{to{-webkit-transform:rotate(1turn);transform:rotate(1turn)}}</style>
+  <style type="text/css">._29HP61GA_0{font-weight:400;color:#353535;line-height:1.76;white-space:normal;word-break:normal;font-size:17px;-webkit-transition:background-color .3s ease;transition:background-color .3s ease}._29HP61GA_0 .MathJax_Display{overflow:auto}._29HP61GA_0 .poster{position:fixed;left:-10000px;top:-10000px;overflow:hidden;padding:1rem;background:#ececec}._29HP61GA_0 .richcontent-pre-copy{font-size:13px;color:#888;position:absolute;right:1em;top:.5em;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}._29HP61GA_0 .richcontent-pre-copy .iconfont{font-size:12px;margin-right:.2em}._29HP61GA_0 a{color:#fa8919;border-bottom:1px solid #fa8919}._29HP61GA_0 img{display:block;max-width:100%;position:relative;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);background-color:#eee;vertical-align:top;border-radius:0}._29HP61GA_0 audio,._29HP61GA_0 video{width:100%;background-color:#eee}._29HP61GA_0 pre{margin-top:16px;padding:34px 0 0;margin-bottom:30px;position:relative;border-radius:6px;background:rgba(246,247,251,.749);border:0}._29HP61GA_0 pre code{font-size:12px;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;-webkit-box-sizing:border-box;box-sizing:border-box;margin-left:16px;margin-right:16px;overflow-x:scroll}._29HP61GA_0 pre code:after{content:"";height:30px;width:100%;display:block}._29HP61GA_0 hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}._29HP61GA_0 h1,._29HP61GA_0 h2,._29HP61GA_0 h3,._29HP61GA_0 h4,._29HP61GA_0 h5{margin-bottom:20px;margin-top:0;font-weight:700;color:#353535}._29HP61GA_0 b,._29HP61GA_0 strong{font-weight:700;color:#353535}._29HP61GA_0 h1{font-size:21px}._29HP61GA_0 h2{font-size:20px}._29HP61GA_0 h3{font-size:19px}._29HP61GA_0 h4{font-size:18px}._29HP61GA_0 h5{font-size:17px}._29HP61GA_0 center,._29HP61GA_0 p{font-weight:400;color:#353535;margin-top:0;margin-bottom:30px;word-break:break-word}._29HP61GA_0 center{text-align:center}._29HP61GA_0 blockquote{margin-top:0;margin-bottom:34px;border-left:3px solid #e8e8e8;padding-left:17px;color:#353535}._29HP61GA_0 blockquote p{margin-top:0;margin-bottom:0}._29HP61GA_0 ol,._29HP61GA_0 ul{margin-bottom:30px}._29HP61GA_0 ol p,._29HP61GA_0 ul p{margin-top:0;margin-bottom:0}._29HP61GA_0 ol{list-style:decimal;margin-left:20px}._29HP61GA_0 ul li{padding-left:17px;position:relative;margin-bottom:10px}._29HP61GA_0 ul li:after{content:"";height:6px;width:6px;border-radius:50%;background:#353535;position:absolute;top:10px;left:0}._29HP61GA_0 .orange{color:#fa8919}._29HP61GA_0 .reference{color:#888}._29HP61GA_0 .m-right{text-align:right}._29HP61GA_0 .m-center{text-align:center;display:block}._29HP61GA_0 .m-gray{color:#888}._29HP61GA_0 .m-small{font-size:15px}._29HP61GA_0 table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}._29HP61GA_0 table.hljs-ln,._29HP61GA_0 table.hljs-ln tbody,._29HP61GA_0 table.hljs-ln td,._29HP61GA_0 table.hljs-ln tr{-webkit-box-sizing:border-box;box-sizing:border-box}._29HP61GA_0 table.hljs-ln td{padding:0;border:0}._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers{min-width:15px;font-size:12px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}._29HP61GA_0 table.hljs-ln td.hljs-ln-code,._29HP61GA_0 table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;line-height:20px;vertical-align:top}._29HP61GA_0 table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;font-size:13px;color:#666;word-wrap:normal;white-space:pre}._2gMcXXSK_0{font-size:15px}._2gMcXXSK_0 h1{font-size:19px}._2gMcXXSK_0 h2{font-size:18px}._2gMcXXSK_0 h3{font-size:17px}._2gMcXXSK_0 h4{font-size:16px}._2gMcXXSK_0 h5{font-size:15px}._2gMcXXSK_0 p{margin-bottom:26px}._2gMcXXSK_0 blockquote{margin-bottom:30px}._2gMcXXSK_0 ol,._2gMcXXSK_0 ul{margin-bottom:26px}._2gMcXXSK_0 .m-small{font-size:13px}._1-IhkAAb_0{font-size:19px}._1-IhkAAb_0 h1{font-size:23px}._1-IhkAAb_0 h2{font-size:22px}._1-IhkAAb_0 h3{font-size:21px}._1-IhkAAb_0 h4{font-size:20px}._1-IhkAAb_0 h5{font-size:19px}._1-IhkAAb_0 .m-small{font-size:17px}._1Xjr5LRK_0 table.hljs-ln td.hljs-ln-code,._1Xjr5LRK_0 table.hljs-ln td.hljs-ln-numbers{font-family:monospace}._1XhbM4Sp_0 pre{background:hsla(43,50%,87%,.749)}._1XhbM4Sp_0 blockquote{border-color:#efe6cf}._2wERfXHe_0 h1,._2wERfXHe_0 h2,._2wERfXHe_0 h3,._2wERfXHe_0 h4,._2wERfXHe_0 h5,._2wERfXHe_0 p{color:silver}._2wERfXHe_0 blockquote{border-color:#3e3e3e}._2wERfXHe_0 li,._2wERfXHe_0 strong{color:silver}._2wERfXHe_0 pre{background:rgba(62,62,62,.749)}._2wERfXHe_0 center{color:silver}._2wERfXHe_0 img{opacity:.9}._2wERfXHe_0 ul li:after{background:silver}._2wERfXHe_0 table.hljs-ln td.hljs-ln-numbers{color:#b2b2b2}._2wERfXHe_0 table.hljs-ln td.hljs-ln-code{color:silver}</style>
+  <script id="MathJax" data-savepage-src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" src=""></script>
+  <style type="text/css">.reJj6Thl_0{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-top:40px}.reJj6Thl_0 a{border-bottom:none}.reJj6Thl_0 ._2273kGdT_0{width:35px;height:35px;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.reJj6Thl_0:last-child ._2CG0SquK_0{border-bottom:none}.reJj6Thl_0 ._2CG0SquK_0{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;padding-bottom:25px;border-bottom:.5px solid #e8e8e8;-webkit-transition:border-bottom .3s ease;transition:border-bottom .3s ease;overflow:hidden}.reJj6Thl_0 ._2CG0SquK_0 ._304R4gla_0{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;padding-bottom:10px}.reJj6Thl_0 ._2CG0SquK_0 ._3M6kV3zb_0{color:#4c4c4c;font-size:16px;font-weight:400;white-space:normal;word-break:normal;line-height:1.6;overflow:hidden;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical}.reJj6Thl_0 ._2CG0SquK_0 ._3D2NkqD6_0{overflow:auto;-webkit-line-clamp:unset}.reJj6Thl_0 ._2CG0SquK_0 ._1H1Z49Dr_0{color:#888;font-size:11px;line-height:1;margin-top:4px}.reJj6Thl_0 ._2CG0SquK_0 ._18Dng5rT_0{color:#353535;font-size:14px;font-weight:700;height:20px;line-height:20px}.reJj6Thl_0 ._1bkbsnjg_0{height:15px;line-height:15px;width:30px;overflow:hidden;font-size:10px;color:#fff;background:#cbcbcb;text-align:center;display:inline-block;border-radius:3px;vertical-align:top;margin-top:2px}.reJj6Thl_0 ._2eMTs2JE_0{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;height:26px}.reJj6Thl_0 ._1YQBH3WC_0{color:#999;font-size:13px;margin-left:42px;width:20px;text-align:center}.reJj6Thl_0 ._13n1j2Zp_0{color:#999;font-size:11px;width:20px;margin-left:38px;text-align:center}.reJj6Thl_0 ._2P4B1Hdm_0{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.reJj6Thl_0 ._2P4B1Hdm_0 i{color:#999;display:inline-block;font-size:15px;margin-right:4px;height:27px;width:15px;margin-top:-2px}.reJj6Thl_0 ._2P4B1Hdm_0 i._2A421P4G_0{background:url(data:image/png;base64,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) no-repeat 50%;background-size:15px}.reJj6Thl_0 ._2P4B1Hdm_0 span{color:#888;font-size:13px;font-weight:400}.reJj6Thl_0 ._2P4B1Hdm_0 span._2A421P4G_0{color:#fa8919}.reJj6Thl_0 ._2r3UB1GX_0{font-size:13px;color:#b2b2b2;height:16px;padding-top:8px}.reJj6Thl_0 ._2r3UB1GX_0 span{font-weight:500}.reJj6Thl_0 ._2r3UB1GX_0 i,.reJj6Thl_0 ._2r3UB1GX_0 span{height:16px;line-height:16px;display:inline-block;vertical-align:top}.reJj6Thl_0 ._2xNIY4NG_0{margin-top:10px}.reJj6Thl_0 ._2xNIY4NG_0 ._33BLbmw4_0{color:#888;font-size:14px;font-weight:400;white-space:normal;word-break:normal;background:#f6f7fb;-webkit-transition:background .3s ease;transition:background .3s ease;border-radius:10px;padding:18px;overflow-x:scroll}.reJj6Thl_0 ._2xNIY4NG_0 ._1H1Z49Dr_0{color:#888;font-size:9px}._0X_LEcd_0 ._2xNIY4NG_0 ._33BLbmw4_0{background:#efe6cf}.cGm0Q9aA_0 ._2CG0SquK_0{border-bottom:1px solid #4c4c4c}.cGm0Q9aA_0 ._2CG0SquK_0 ._1H1Z49Dr_0,.cGm0Q9aA_0 ._2CG0SquK_0 ._3M6kV3zb_0,.cGm0Q9aA_0 ._2CG0SquK_0 ._18Dng5rT_0{color:silver}.cGm0Q9aA_0 ._2xNIY4NG_0 ._33BLbmw4_0{color:silver;background:#3e3e3e}.cGm0Q9aA_0 ._1YQBH3WC_0,.cGm0Q9aA_0 ._2P4B1Hdm_0 i,.cGm0Q9aA_0 ._2P4B1Hdm_0 span,.cGm0Q9aA_0 ._13n1j2Zp_0{color:#999}._2Gn7zqLg_0 ._1bkbsnjg_0{line-height:18px}</style>
+  <style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style>
+  <style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style>
+  <style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style>
+  <style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style>
+  <style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style>
+  <style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style>
+  <style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style>  
+  <meta name="savepage-url" content="https://time.geekbang.org/column/article/12423"> 
+  <meta name="savepage-title" content="极客时间 | 深入拆解Java虚拟机"> 
+  <meta name="savepage-date" content="Mon May 20 2019 13:17:07 GMT+0800 (中国标准时间)"> 
+  <meta name="savepage-state" content="Standard Items; Used page loader; Retained cross-origin frames; Removed unsaved URLs; Max frame depth = 5; Max resource size = 50MB; Max resource time = 10s;"> 
+  <meta name="savepage-version" content="13.6"> 
+  <meta name="savepage-comments" content="">
+  <div id="MathJax_Message" style="display: none;"></div>
+  <div id="app">
+   <div class="_3ADRghFH_0" style="background-color: rgb(255, 255, 255);">
+    <div class="gpDqvVI7_0" style="background-color: rgb(255, 255, 255);"></div> 
+    <div class="_20-cXID6_0" style="opacity: 1;">
+     <div class="_3O_7qs2p_0 _2q1SuvsS_0">
+      <div>  
+       <div class="_1UaW_Eq1_0">
+        <div class="_1qHJ5OLn_0">
+         <div class="_2FYmyQEJ_0"></div> 
+         <div class="_33xQ4nNG_0">
+          关闭
+         </div>
+        </div> 
+        <div class="_1y_WRr3L_0">
+         <div class="_2HnUZhdg_0 _1r7t-t9P_0">
+          讲堂
+         </div> 
+         <div class="_2HnUZhdg_0">
+          客户端下载
+         </div> 
+         <div class="_2HnUZhdg_0">
+          兑换中心
+         </div> 
+         <div class="_2HnUZhdg_0">
+          企业版
+         </div>
+        </div> 
+        <div class="_3IeMxVb7_0">
+         <div class="_2HnUZhdg_0">
+          <span class="_339_Pvt6_0 iconfont"></span>渠道合作
+         </div> 
+         <div class="_2HnUZhdg_0">
+          <span class="_339_Pvt6_0 iconfont"></span>推荐作者
+         </div>
+        </div>
+       </div>
+      </div> 
+      <!----> 
+      <div class="_50pDbNcP_0">
+       <h1 class="vJXgmLTi_0 _2QmGFWqF_0" style="margin-bottom:1em;"> 【工具篇】 常用工具介绍 </h1>  
+       <div class="_3Jbcj4Iu_0 _2QmGFWqF_0"> 
+        <div class="_2SACi4xg_0">
+         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAABCAYAAAB35kaxAAAAJklEQVQYV2N89+7df0FBQQYQeP/+PZgGAWQxXGxCarHJk6OHkPsAObcny8LRjPYAAAAASUVORK5CYII=">
+         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAABCAYAAADErm6rAAAAH0lEQVQYV2N89+7dfwYoEBQUBLPev3/PgMwmRx6mBwALjxLLyVW6HgAAAABJRU5ErkJggg==">
+         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD0AAAABCAYAAABt2qY/AAAAJklEQVQYV2N89+7dfwYoEBQUBLPev38PE2JAFqO1PDZ3UNN+mPkAyVEty3ZKbRwAAAAASUVORK5CYII=">
+         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAABCAYAAADaZ14YAAAAH0lEQVQYV2N89+7dfwYoEBQUBLPev3/PgIuNTS02MQCNKBLL0Byp2gAAAABJRU5ErkJggg==">
+        </div> 
+        <!---->  
+        <div class="_3IatBmhv_0">
+         <div class="_29HP61GA_0">
+          <p>在前面的文章中，我曾使用了不少工具来辅助讲解，也收到了不少同学留言，说不了解这些工具，不知道都有什么用，应该怎么用。那么今天我便统一做一次具体的介绍。本篇代码较多，你可以点击文稿查看。</p> 
+          <h2>javap：查阅 Java 字节码</h2> 
+          <p>javap 是一个能够将 class 文件反汇编成人类可读格式的工具。在本专栏中，我们经常借助这个工具来查阅 Java 字节码。</p> 
+          <p>举个例子，在讲解异常处理那一篇中，我曾经展示过这么一段代码。</p> 
+          <pre style="position: relative;"><code>public class Foo {
+private int tryBlock;
+private int catchBlock;
+private int finallyBlock;
+private int methodExit;
+
+public void test() {
+try {
+tryBlock = 0;
+} catch (Exception e) {
+catchBlock = 1;
+} finally {
+finallyBlock = 2;
+}
+methodExit = 3;
+}
+}</code></pre> 
+          <p>编译过后，我们便可以使用 javap 来查阅 Foo.test 方法的字节码。</p> 
+          <pre style="position: relative;"><code>$ javac Foo.java
+$ javap -p -v Foo
+Classfile ../Foo.class
+Last modified ..; size 541 bytes
+MD5 checksum 3828cdfbba56fea1da6c8d94fd13b20d
+Compiled from "Foo.java"
+public class Foo
+minor version: 0
+major version: 54
+flags: (0x0021) ACC_PUBLIC, ACC_SUPER
+this_class: #7 // Foo
+super_class: #8 // java/lang/Object
+interfaces: 0, fields: 4, methods: 2, attributes: 1
+Constant pool:
+#1 = Methodref #8.#23 // java/lang/Object."
+            <init>
+             ":()V
+#2 = Fieldref #7.#24 // Foo.tryBlock:I
+#3 = Fieldref #7.#25 // Foo.finallyBlock:I
+#4 = Class #26 // java/lang/Exception
+#5 = Fieldref #7.#27 // Foo.catchBlock:I
+#6 = Fieldref #7.#28 // Foo.methodExit:I
+#7 = Class #29 // Foo
+#8 = Class #30 // java/lang/Object
+#9 = Utf8 tryBlock
+#10 = Utf8 I
+#11 = Utf8 catchBlock
+#12 = Utf8 finallyBlock
+#13 = Utf8 methodExit
+#14 = Utf8 
+             <init>
+              
+#15 = Utf8 ()V
+#16 = Utf8 Code
+#17 = Utf8 LineNumberTable
+#18 = Utf8 test
+#19 = Utf8 StackMapTable
+#20 = Class #31 // java/lang/Throwable
+#21 = Utf8 SourceFile
+#22 = Utf8 Foo.java
+#23 = NameAndType #14:#15 // "
+              <init>
+               ":()V
+#24 = NameAndType #9:#10 // tryBlock:I
+#25 = NameAndType #12:#10 // finallyBlock:I
+#26 = Utf8 java/lang/Exception
+#27 = NameAndType #11:#10 // catchBlock:I
+#28 = NameAndType #13:#10 // methodExit:I
+#29 = Utf8 Foo
+#30 = Utf8 java/lang/Object
+#31 = Utf8 java/lang/Throwable
+{
+private int tryBlock;
+descriptor: I
+flags: (0x0002) ACC_PRIVATE
+
+private int catchBlock;
+descriptor: I
+flags: (0x0002) ACC_PRIVATE
+
+private int finallyBlock;
+descriptor: I
+flags: (0x0002) ACC_PRIVATE
+
+private int methodExit;
+descriptor: I
+flags: (0x0002) ACC_PRIVATE
+
+public Foo();
+descriptor: ()V
+flags: (0x0001) ACC_PUBLIC
+Code:
+stack=1, locals=1, args_size=1
+0: aload_0
+1: invokespecial #1 // Method java/lang/Object."
+               <init>
+                ":()V
+4: return
+LineNumberTable:
+line 1: 0
+
+public void test();
+descriptor: ()V
+flags: (0x0001) ACC_PUBLIC
+Code:
+stack=2, locals=3, args_size=1
+0: aload_0
+1: iconst_0
+2: putfield #2 // Field tryBlock:I
+5: aload_0
+6: iconst_2
+7: putfield #3 // Field finallyBlock:I
+10: goto 35
+13: astore_1
+14: aload_0
+15: iconst_1
+16: putfield #5 // Field catchBlock:I
+19: aload_0
+20: iconst_2
+21: putfield #3 // Field finallyBlock:I
+24: goto 35
+27: astore_2
+28: aload_0
+29: iconst_2
+30: putfield #3 // Field finallyBlock:I
+33: aload_2
+34: athrow
+35: aload_0
+36: iconst_3
+37: putfield #6 // Field methodExit:I
+40: return
+Exception table:
+from to target type
+0 5 13 Class java/lang/Exception
+0 5 27 any
+13 19 27 any
+LineNumberTable:
+line 9: 0
+line 13: 5
+line 14: 10
+line 10: 13
+line 11: 14
+line 13: 19
+line 14: 24
+line 13: 27
+line 14: 33
+line 15: 35
+line 16: 40
+StackMapTable: number_of_entries = 3
+frame_type = 77 /* same_locals_1_stack_item */
+stack = [ class java/lang/Exception ]
+frame_type = 77 /* same_locals_1_stack_item */
+stack = [ class java/lang/Throwable ]
+frame_type = 7 /* same */
+}
+SourceFile: "Foo.java"
+               </init>
+              </init>
+             </init>
+            </init></code></pre> 
+          <p>这里面我用到了两个选项。第一个选项是 -p。默认情况下 javap 会打印所有非私有的字段和方法，当加了 -p 选项后，它还将打印私有的字段和方法。第二个选项是 -v。它尽可能地打印所有信息。如果你只需要查阅方法对应的字节码，那么可以用 -c 选项来替换 -v。</p> 
+          <p>javap 的 -v 选项的输出分为几大块。</p> 
+          <p>1. 基本信息，涵盖了原 class 文件的相关信息。</p> 
+          <p>class 文件的版本号（minor version: 0，major version: 54），该类的访问权限（flags: (0x0021) ACC_PUBLIC, ACC_SUPER），该类（this_class: #7）以及父类（super_class: #8）的名字，所实现接口（interfaces: 0）、字段（fields: 4）、方法（methods: 2）以及属性（attributes: 1）的数目。</p> 
+          <p>这里属性指的是 class 文件所携带的辅助信息，比如该 class 文件的源文件的名称。这类信息通常被用于 Java 虚拟机的验证和运行，以及 Java 程序的调试，一般无须深入了解。</p> 
+          <pre style="position: relative;"><code>Classfile ../Foo.class
+Last modified ..; size 541 bytes
+MD5 checksum 3828cdfbba56fea1da6c8d94fd13b20d
+Compiled from "Foo.java"
+public class Foo
+minor version: 0
+major version: 54
+flags: (0x0021) ACC_PUBLIC, ACC_SUPER
+this_class: #7 // Foo
+super_class: #8 // java/lang/Object
+interfaces: 0, fields: 4, methods: 2, attributes: 1</code></pre> 
+          <p>class 文件的版本号指的是编译生成该 class 文件时所用的 JRE 版本。由较新的 JRE 版本中的 javac 编译而成的 class 文件，不能在旧版本的 JRE 上跑，否则，会出现如下异常信息。（Java 8 对应的版本号为 52，Java 10 对应的版本号为 54。）</p> 
+          <pre style="position: relative;"><code>Exception in thread "main" java.lang.UnsupportedClassVersionError: Foo has been compiled by a more recent version of the Java Runtime (class file version 54.0), this version of the Java Runtime only recognizes class file versions up to 52.0</code></pre> 
+          <p>类的访问权限通常为 ACC_ 开头的常量。具体每个常量的意义可以查阅 Java 虚拟机规范 4.1 小节 [1]。</p> 
+          <p>2. 常量池，用来存放各种常量以及符号引用。</p> 
+          <p>常量池中的每一项都有一个对应的索引（如 #1），并且可能引用其他的常量池项（#1 = Methodref&nbsp;#8.#23）。</p> 
+          <pre style="position: relative;"><code>Constant pool:
+#1 = Methodref #8.#23 // java/lang/Object."
+            <init>
+             ":()V
+...
+#8 = Class #30 // java/lang/Object
+...
+#14 = Utf8 
+             <init>
+              
+#15 = Utf8 ()V
+...
+#23 = NameAndType #14:#15 // "
+              <init>
+               ":()V
+...
+#30 = Utf8 java/lang/Object
+              </init>
+             </init>
+            </init></code></pre> 
+          <p>举例来说，上图中的 1 号常量池项是一个指向 Object 类构造器的符号引用。它是由另外两个常量池项所构成。如果将它看成一个树结构的话，那么它的叶节点会是字符串常量，如下图所示。</p> 
+          <p><img src="https://static001.geekbang.org/resource/image/f8/8c/f87469e321c52b21b0d2abb88e7b288c.png" alt=""></p> 
+          <p>3. 字段区域，用来列举该类中的各个字段。</p> 
+          <p>这里最主要的信息便是该字段的类型（descriptor: I）以及访问权限（flags: (0x0002) ACC_PRIVATE）。对于声明为 final 的静态字段而言，如果它是基本类型或者字符串类型，那么字段区域还将包括它的常量值。</p> 
+          <pre style="position: relative;"><code>private int tryBlock;
+descriptor: I
+flags: (0x0002) ACC_PRIVATE
+</code></pre> 
+          <p>另外，Java 虚拟机同样使用了“描述符”（descriptor）来描述字段的类型。具体的对照如下表所示。其中比较特殊的，我已经高亮显示。</p> 
+          <p>4. 方法区域，用来列举该类中的各个方法。</p> 
+          <p>除了方法描述符以及访问权限之外，每个方法还包括最为重要的代码区域（Code:)。</p> 
+          <pre style="position: relative;"><code>public void test();
+descriptor: ()V
+flags: (0x0001) ACC_PUBLIC
+Code:
+stack=2, locals=3, args_size=1
+0: aload_0
+...
+10: goto 35
+...
+34: athrow
+35: aload_0
+...
+40: return
+Exception table:
+from to target type
+0 5 13 Class java/lang/Exception
+0 5 27 any
+13 19 27 any
+LineNumberTable:
+line 9: 0
+...
+line 16: 40
+StackMapTable: number_of_entries = 3
+frame_type = 77 /* same_locals_1_stack_item */
+stack = [ class java/lang/Exception ]
+...</code></pre> 
+          <p>代码区域一开始会声明该方法中的操作数栈（stack=2）和局部变量数目（locals=3）的最大值，以及该方法接收参数的个数（args_size=1）。注意这里局部变量指的是字节码中的局部变量，而非 Java 程序中的局部变量。</p> 
+          <p>接下来则是该方法的字节码。每条字节码均标注了对应的偏移量（bytecode index，BCI），这是用来定位字节码的。比如说偏移量为 10 的跳转字节码 10: goto 35，将跳转至偏移量为 35 的字节码 35: aload_0。</p> 
+          <p>紧跟着的异常表（Exception table:）也会使用偏移量来定位每个异常处理器所监控的范围（由 from 到 to 的代码区域），以及异常处理器的起始位置（target）。除此之外，它还会声明所捕获的异常类型（type）。其中，any 指代任意异常类型。</p> 
+          <p>再接下来的行数表（LineNumberTable:）则是 Java 源程序到字节码偏移量的映射。如果你在编译时使用了 -g 参数（javac -g Foo.java），那么这里还将出现局部变量表（LocalVariableTable:），展示 Java 程序中每个局部变量的名字、类型以及作用域。</p> 
+          <p>行数表和局部变量表均属于调试信息。Java 虚拟机并不要求 class 文件必备这些信息。</p> 
+          <pre style="position: relative;"><code>LocalVariableTable:
+Start Length Slot Name Signature
+14 5 1 e Ljava/lang/Exception;
+0 41 0 this LFoo;</code></pre> 
+          <p>最后则是字节码操作数栈的映射表（StackMapTable: number_of_entries = 3）。该表描述的是字节码跳转后操作数栈的分布情况，一般被 Java 虚拟机用于验证所加载的类，以及即时编译相关的一些操作，正常情况下，你无须深入了解。</p> 
+          <h2>2.OpenJDK 项目 Code Tools：实用小工具集</h2> 
+          <p>OpenJDK 的 Code Tools 项目 [2] 包含了好几个实用的小工具。</p> 
+          <p>在第一篇的实践环节中，我们使用了其中的字节码汇编器反汇编器 ASMTools[3]，当前 6.0 版本的下载地址位于 [4]。ASMTools 的反汇编以及汇编操作所对应的命令分别为：</p> 
+          <pre style="position: relative;"><code>$ java -cp /path/to/asmtools.jar org.openjdk.asmtools.jdis.Main Foo.class &gt; Foo.jasm</code></pre> 
+          <p>和</p> 
+          <pre style="position: relative;"><code>$ java -cp /path/to/asmtools.jar org.openjdk.asmtools.jasm.Main Foo.jasm</code></pre> 
+          <p>该反汇编器的输出格式和 javap 的不尽相同。一般我只使用它来进行一些简单的字节码修改，以此生成无法直接由 Java 编译器生成的类，它在 HotSpot 虚拟机自身的测试中比较常见。</p> 
+          <p>在第一篇的实践环节中，我们需要将整数 2 赋值到一个声明为 boolean 类型的局部变量中。我采取的做法是将编译生成的 class 文件反汇编至一个文本文件中，然后找到 boolean flag = true 对应的字节码序列，也就是下面的两个。</p> 
+          <pre style="position: relative;"><code>iconst_1;
+istore_1;</code></pre> 
+          <p>将这里的 iconst_1 改为 iconst_2[5]，保存后再汇编至 class 文件即可完成第一篇实践环节的需求。</p> 
+          <p>除此之外，你还可以利用这一套工具来验证我之前文章中的一些结论。比如我说过 class 文件允许出现参数类型相同、而返回类型不同的方法，并且，在作为库文件时 Java 编译器将使用先定义的那一个，来决定具体的返回类型。</p> 
+          <p>具体的验证方法便是在反汇编之后，利用文本编辑工具复制某一方法，并且更改该方法的描述符，保存后再汇编至 class 文件。</p> 
+          <p>Code Tools 项目还包含另一个实用的小工具 JOL[6]，当前 0.9 版本的下载地址位于 [7]。JOL 可用于查阅 Java 虚拟机中对象的内存分布，具体可通过如下两条指令来实现。</p> 
+          <pre style="position: relative;"><code>$ java -jar /path/to/jol-cli-0.9-full.jar internals java.util.HashMap
+$ java -jar /path/to/jol-cli-0.9-full.jar estimates java.util.HashMap</code></pre> 
+          <h2>3.ASM：Java 字节码框架</h2> 
+          <p>ASM[8] 是一个字节码分析及修改框架。它被广泛应用于许多项目之中，例如 Groovy、Kotlin 的编译器，代码覆盖测试工具 Cobertura、JaCoCo，以及各式各样通过字节码注入实现的程序行为监控工具。甚至是 Java 8 中 Lambda 表达式的适配器类，也是借助 ASM 来动态生成的。</p> 
+          <p>ASM 既可以生成新的 class 文件，也可以修改已有的 class 文件。前者相对比较简单一些。ASM 甚至还提供了一个辅助类 ASMifier，它将接收一个 class 文件并且输出一段生成该 class 文件原始字节数组的代码。如果你想快速上手 ASM 的话，那么你可以借助 ASMifier 生成的代码来探索各个 API 的用法。</p> 
+          <p>下面我将借助 ASMifier，来生成第一篇实践环节所用到的类。（你可以通过该地址 [9] 下载 6.0-beta 版。）</p> 
+          <pre style="position: relative;"><code>$ echo '
+public class Foo {
+public static void main(String[] args) {
+boolean flag = true;
+if (flag) System.out.println("Hello, Java!");
+if (flag == true) System.out.println("Hello, JVM!");
+}
+}' &gt; Foo.java
+# 这里的 javac 我使用的是 Java 8 版本的。ASM 6.0 可能暂不支持新版本的 javac 编译出来的 class 文件
+$ javac Foo.java
+$ java -cp /PATH/TO/asm-all-6.0_BETA.jar org.objectweb.asm.util.ASMifier Foo.class | tee FooDump.java
+...
+public class FooDump implements Opcodes {
+
+public static byte[] dump () throws Exception {
+
+ClassWriter cw = new ClassWriter(0);
+FieldVisitor fv;
+MethodVisitor mv;
+AnnotationVisitor av0;
+
+cw.visit(V1_8, ACC_PUBLIC + ACC_SUPER, "Foo", null, "java/lang/Object", null);
+
+...
+
+{
+mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", "([Ljava/lang/String;)V", null, null);
+mv.visitCode();
+mv.visitInsn(ICONST_1);
+mv.visitVarInsn(ISTORE, 1);
+mv.visitVarInsn(ILOAD, 1);
+...
+mv.visitInsn(RETURN);
+mv.visitMaxs(2, 2);
+mv.visitEnd();
+}
+...</code></pre> 
+          <p>可以看到，ASMifier 生成的代码中包含一个名为 FooDump 的类，其中定义了一个名为 dump 的方法。该方法将返回一个 byte 数组，其值为生成类的原始字节。</p> 
+          <p>在 dump 方法中，我们新建了功能类 ClassWriter 的一个实例，并通过它来访问不同的成员，例如方法、字段等等。</p> 
+          <p>每当访问一种成员，我们便会得到另一个访问者。在上面这段代码中，当我们访问方法时（即 visitMethod），便会得到一个 MethodVisitor。在接下来的代码中，我们会用这个 MethodVisitor 来访问（这里等同于生成）具体的指令。</p> 
+          <p>这便是 ASM 所使用的访问者模式。当然，这段代码仅包含 ClassWriter 这一个访问者，因此看不出具体有什么好处。</p> 
+          <p>我们暂且不管这个访问者模式，先来看看如何实现第一篇课后实践的要求。首先，main 方法中的 boolean flag = true; 语句对应的代码是：</p> 
+          <pre style="position: relative;"><code>mv.visitInsn(ICONST_1);
+mv.visitVarInsn(ISTORE, 1);</code></pre> 
+          <p>也就是说，我们只需将这里的 ICONST_1 更改为 ICONST_2，便可以满足要求。下面我用另一个类 Wrapper，来调用修改过后的 FooDump.dump 方法。</p> 
+          <pre style="position: relative;"><code>$ echo 'import java.nio.file.*;
+
+public class Wrapper {
+public static void main(String[] args) throws Exception {
+Files.write(Paths.get("Foo.class"), FooDump.dump());
+}
+}' &gt; Wrapper.java
+$ javac -cp /PATH/TO/asm-all-6.0_BETA.jar FooDump.java Wrapper.java
+$ java -cp /PATH/TO/asm-all-6.0_BETA.jar:. Wrapper
+$ java Foo</code></pre> 
+          <p>这里的输出结果应和通过 ASMTools 修改的结果一致。</p> 
+          <p>通过 ASM 来修改已有 class 文件则相对复杂一些。不过我们可以从下面这段简单的代码来开始学起：</p> 
+          <pre style="position: relative;"><code>public static void main(String[] args) throws Exception {
+ClassReader cr = new ClassReader("Foo");
+ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+cr.accept(cw, ClassReader.SKIP_FRAMES);
+Files.write(Paths.get("Foo.class"), cw.toByteArray());
+}</code></pre> 
+          <p>这段代码的功能便是读取一个 class 文件，将之转换为 ASM 的数据结构，然后再转换为原始字节数组。其中，我使用了两个功能类。除了已经介绍过的 ClassWriter 外，还有一个 ClassReader。</p> 
+          <p>ClassReader 将读取“Foo”类的原始字节，并且翻译成对应的访问请求。也就是说，在上面 ASMifier 生成的代码中的各个访问操作，现在都交给 ClassReader.accept 这一方法来发出了。</p> 
+          <p>那么，如何修改这个 class 文件的字节码呢？原理很简单，就是将 ClassReader 的访问请求发给另外一个访问者，再由这个访问者委派给 ClassWriter。</p> 
+          <p>这样一来，新增操作可以通过在某一需要转发的请求后面附带新的请求来实现；删除操作可以通过不转发请求来实现；修改操作可以通过忽略原请求，新建并发出另外的请求来实现。</p> 
+          <p><img src="https://static001.geekbang.org/resource/image/2a/ce/2a5d6813e32b8f88abae2b9f7b151fce.png" alt=""></p> 
+          <pre style="position: relative;"><code>import java.nio.file.*;
+import org.objectweb.asm.*;
+
+public class ASMHelper implements Opcodes {
+
+static class MyMethodVisitor extends MethodVisitor {
+private MethodVisitor mv;
+public MyMethodVisitor(int api, MethodVisitor mv) {
+super(api, null);
+this.mv = mv;
+}
+
+@Override
+public void visitCode() {
+mv.visitCode();
+mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+mv.visitLdcInsn("Hello, World!");
+mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "println", "(Ljava/lang/String;)V", false);
+mv.visitInsn(RETURN);
+mv.visitMaxs(2, 1);
+mv.visitEnd();
+}
+}
+
+static class MyClassVisitor extends ClassVisitor {
+
+public MyClassVisitor(int api, ClassVisitor cv) {
+super(api, cv);
+}
+
+@Override
+public MethodVisitor visitMethod(int access, String name, String descriptor, String signature,
+String[] exceptions) {
+MethodVisitor visitor = super.visitMethod(access, name, descriptor, signature, exceptions);
+if ("main".equals(name)) {
+return new MyMethodVisitor(ASM6, visitor);
+}
+return visitor;
+}
+}
+
+public static void main(String[] args) throws Exception {
+ClassReader cr = new ClassReader("Foo");
+ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+ClassVisitor cv = new MyClassVisitor(ASM6, cw);
+cr.accept(cv, ClassReader.SKIP_FRAMES);
+Files.write(Paths.get("Foo.class"), cw.toByteArray());
+}
+}</code></pre> 
+          <p>这里我贴了一段代码，在 ClassReader 和 ClassWriter 中间插入了一个自定义的访问者 MyClassVisitor。它将截获由 ClassReader 发出的对名字为“main”的方法的访问请求，并且替换为另一个自定义的 MethodVisitor。</p> 
+          <p>这个 MethodVisitor 会忽略由 ClassReader 发出的任何请求，仅在遇到 visitCode 请求时，生成一句“System.out.println(“Hello World!”);”。</p> 
+          <p>由于篇幅的限制，我就不继续深入介绍下去了。如果你对 ASM 有浓厚的兴趣，可以参考这篇教程 [10]。</p> 
+          <p>你对这些常用工具还有哪些问题呢？可以给我留言，我们一起讨论。感谢你的收听，我们下期再见。</p> 
+          <p>[1]<br> <a href="https://docs.oracle.com/javase/specs/jvms/se10/html/jvms-4.html#jvms-4.1">https://docs.oracle.com/javase/specs/jvms/se10/html/jvms-4.html#jvms-4.1</a><br> [2]<br> <a href="http://openjdk.java.net/projects/code-tools/">http://openjdk.java.net/projects/code-tools/</a><br> [3]<br> <a href="https://wiki.openjdk.java.net/display/CodeTools/asmtools">https://wiki.openjdk.java.net/display/CodeTools/asmtools</a><br> [4]<br> <a href="https://adopt-openjdk.ci.cloudbees.com/view/OpenJDK/job/asmtools/lastSuccessfulBuild/artifact/asmtools-6.0.tar.gz">https://adopt-openjdk.ci.cloudbees.com/view/OpenJDK/job/asmtools/lastSuccessfulBuild/artifact/asmtools-6.0.tar.gz</a><br> [5]<br> <a href="https://cs.au.dk/~mis/dOvs/jvmspec/ref--21.html">https://cs.au.dk/~mis/dOvs/jvmspec/ref--21.html</a><br> [6]<br> <a href="http://openjdk.java.net/projects/code-tools/jol/">http://openjdk.java.net/projects/code-tools/jol/</a><br> [7]<br> <a href="http://central.maven.org/maven2/org/openjdk/jol/jol-cli/0.9/jol-cli-0.9-full.jar">http://central.maven.org/maven2/org/openjdk/jol/jol-cli/0.9/jol-cli-0.9-full.jar</a><br> [8]<br> <a href="https://asm.ow2.io/">https://asm.ow2.io/</a><br> [9]<br> <a href="https://repository.ow2.org/nexus/content/repositories/releases/org/ow2/asm/asm-all/6.0_BETA/asm-all-6.0_BETA.jar">https://repository.ow2.org/nexus/content/repositories/releases/org/ow2/asm/asm-all/6.0_BETA/asm-all-6.0_BETA.jar</a><br> [10]<br> <a href="http://web.cs.ucla.edu/~msb/cs239-tutorial/">http://web.cs.ucla.edu/~msb/cs239-tutorial/</a></p> 
+          <p><img src="https://static001.geekbang.org/resource/image/2a/d5/2a62e58cbdf56a5dc40748567d346fd5.jpg" alt=""></p> 
+         </div>
+        </div> 
+        <!----> 
+       </div>  
+      </div> 
+      <!---->
+     </div> 
+     <!---->
+    </div>
+   </div> 
+   <div class="_2sRsF5RP_0"></div>
+  </div>
+  <link rel="dns-prefetch" href="//cdn.mathjax.org">
+  <script type="text/x-mathjax-config;executed=true"></script>
+  <script></script>
+  <script></script>
+  <script type="text/javascript" data-savepage-src="https://static001.geekbang.org/static/time/js/manifest.970cc18adf38c2f3ad3b.js" src=""></script>
+  <script type="text/javascript" data-savepage-src="https://static001.geekbang.org/static/time/js/vendor.ebe5833539e893ecb614.js" src=""></script>
+  <script type="text/javascript" data-savepage-src="https://static001.geekbang.org/static/time/js/app.4e496777cfbd39bb9d8c.js" src=""></script>
+  <div id="gkui-modal-controller">
+   <!----> 
+  </div>
+  <!---->
+  <div id="qb_collection_img_mask" style="display: block; top: 164px; left: 406.5px;"> 
+   <div class="qb_collection_img_icon"></div> 
+   <span>收藏</span> 
+  </div>
+ </body>
+</html>

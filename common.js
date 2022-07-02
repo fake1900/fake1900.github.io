@@ -31,7 +31,7 @@ function back() {
     routes.pop()
     localStorage.setItem('routes', JSON.stringify(routes))
     console.info(routes[routes.length-1])
-    location.href = routes[routes.length-1]
+    location.href = routes.length==0 ? '/' : routes[routes.length-1]
 }
 // 下一篇
 function next() {

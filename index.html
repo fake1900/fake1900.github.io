@@ -27,7 +27,7 @@
 
 <script>
     // 跳转到上次的页面    
-    let routes = JSON.parse(localStorage.getItem('routes')||'')
+    let routes = JSON.parse(localStorage.getItem('routes')||'[]')
     if(routes.length>1) {
         let lastpage = routes.pop();
         console.info("lastpage", lastpage)

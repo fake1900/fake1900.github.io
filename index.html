@@ -26,7 +26,6 @@
 <div><a href="./docs/23-邱岳的产品实战/index.html">23-邱岳的产品实战</a></div>
 <div><a href="./docs/27-邱岳的产品手记/index.html">27-邱岳的产品手记</a></div>
 
-<a id = "tmplink" style="display:none;" href=""></a>
 </body>
 <script>
     // 判断浏览器是否支持 Service Worker
@@ -48,16 +47,11 @@
     // 跳转到上次的页面    
     let routes = JSON.parse(localStorage.getItem('routes')||'[]')
     if(routes.length>1) {
-        let lastpage = routes.pop();
-        routes = []
-        localStorage.setItem('routes', JSON.stringify(routes))
-        // window.location.href = lastpage;
-        // window.open(lastpage, '_self') 
+        //let lastpage = routes.pop();
+        //routes = []
+        //localStorage.setItem('routes', JSON.stringify(routes))
         
-        let link = document.getElementById('tmplink')
-        link.href = lastpage
-        link.click()
-        //setTimeout(()=>{link.click()}, 3000)
+        window.location.href = routes[routes.length-1];
     }
 </script>
     

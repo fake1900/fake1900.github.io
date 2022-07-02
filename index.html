@@ -26,12 +26,17 @@
 <div><a href="./docs/27-邱岳的产品手记/index.html">27-邱岳的产品手记</a></div>
 
 <script>
-    // 跳转到上次的页面
-    let lastpage = localStorage.getItem('lastpage');
-    console.info("lastpage ", lastpage);
-    if(lastpage) {
-        location.href = lastpage;
+    // 跳转到上次的页面    
+    let routes = JSON.parse(localStorage.getItem('routes')||'')
+    if(routes.length>1) {
+        let lastpage = routes.pop();
+        console.info("lastpage", lastpage)
+        localStorage.setItem('routes', JSON.stringify([]))
+        // window.location.href = lastpage;
+        window.open(lastpage, '_self')
     }
+        
+        
     
     // 判断浏览器是否支持 Service Worker
     if ('serviceWorker' in navigator) {

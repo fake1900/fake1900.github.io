@@ -45,13 +45,9 @@
     
     
     // 跳转到上次的页面    
-    let routes = JSON.parse(localStorage.getItem('routes')||'[]')
-    if(routes.length>1) {
-        //let lastpage = routes.pop();
-        //routes = []
-        //localStorage.setItem('routes', JSON.stringify(routes))
-        
-        window.location.href = routes[routes.length-1];
+    let lastpage = localStorage.getItem('lastpage')
+    if(lastpage) {        
+        window.location.href = lastpage;
     }
 </script>
     

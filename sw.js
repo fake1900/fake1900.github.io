@@ -2,7 +2,7 @@
 // Service Worker 注册失败，请求不会进入 fetch 事件
 // var request = window.indexedDB.open("MyTestDatabase");
 
-/*
+/**/
 self.addEventListener('fetch', function (event) {
     
     // 打印请求资源网址
@@ -41,9 +41,9 @@ self.addEventListener('fetch', function (event) {
         })
     );
 })
-*/
+
  
-/**/
+/*
 
 var cacheName = 'js13kPWA-v2';
 var contentToCache = [
@@ -82,3 +82,5 @@ self.addEventListener('install', function(e) {
         })
     );
 });
+
+*/

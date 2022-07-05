@@ -1,21 +1,32 @@
 console.info('hello~~~~~~~~~~~~')
 
+
 // 记录跳转历史
-let routes = JSON.parse(localStorage.getItem('routes')||'[]')
-let href = window.location.href
+localStorage.setItem('lastpage', window.location.href)
 
-function pushRoute() {
-    let index = routes.indexOf(href)
-    if(index!=-1) {
-        routes.length = index + 1
-    } else {
-        routes.push(window.location.href)
-    }
-    localStorage.setItem('routes', JSON.stringify(routes))
-}
-pushRoute()
 
+/*
  
+// 数据存储
+let store = {
+    backUrl: null,
+    nextUrl: null
+}
+
+// 返回
+function back() {
+    location.href = store.backUrl || '/'
+}
+// 下一篇
+function next() {
+    if(store.next) {
+        location.href = store.next
+    } else {
+        alert('开发中...')   
+    }
+}
+
+// 添加底部跳转链接
 function addBottomBar() {
     let div = document.querySelector('#bottom-bar')
     if(!div) {
@@ -26,21 +37,12 @@ function addBottomBar() {
         document.body.appendChild(div);
     }
 }
-// 返回
-function back() {
-    routes.pop()
-    localStorage.setItem('routes', JSON.stringify(routes))
-    console.info(routes[routes.length-1])
-    location.href = routes.length==0 ? '/' : routes[routes.length-1]
-}
-// 下一篇
-function next() {
-    alert('开发中...')
-}
- 
+
+// 滚动到底部事件
 window.onscroll = function() {
  if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
     addBottomBar()
  }
 }
 
+*/
